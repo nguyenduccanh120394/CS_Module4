@@ -4,10 +4,14 @@ import com.codegym.model.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.token.TokenService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
@@ -17,8 +21,11 @@ public class JwtService {
     private static final long EXPIRE_TIME = 86400000000L;
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class.getName());
 
+    @Autowired
+    private TokenService tokenService;
+
     public String generateTokenLogin(Authentication authentication) {
-        UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
+        UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
@@ -29,9 +36,10 @@ public class JwtService {
     }
 
     public boolean validateJwtToken(String authToken) {
+
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(authToken);
-            return true;
+            return tokenService.checkValidToken(authToken);
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature -> Message: {} ", e);
         } catch (MalformedJwtException e) {
@@ -48,10 +56,20 @@ public class JwtService {
     }
 
     public String getUserNameFromJwtToken(String token) {
+
         String userName = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
         return userName;
+    }
+    public String getJwtFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.replace("Bearer ", "");
+        }
+
+        return null;
     }
 }
