@@ -5,11 +5,10 @@ import com.codegym.service.answer.IAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/answers")
 public class AnswerController {
     @Autowired
@@ -18,5 +17,31 @@ public class AnswerController {
     @GetMapping("")
     public ResponseEntity<Iterable<Answer>> findAll(){
         return new ResponseEntity<>(answerService.findAll(), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/question")
+    public ResponseEntity<Iterable<Answer>> findAllbyQuestion(@RequestParam Long id){
+        return new ResponseEntity<>(answerService.findAllByQuestion(id), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/create")
+    public ResponseEntity<Answer> create(@RequestBody Answer answer){
+        return new ResponseEntity<>(answerService.save(answer), HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<Answer> findById(@RequestParam Long id){
+        return new ResponseEntity<>(answerService.findById(id).get(), HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<Answer> edit(@RequestBody Answer answer){
+        return new ResponseEntity<>(answerService.save(answer), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Answer> remove(@RequestParam Long id){
+        answerService.remove(id);
+        return new ResponseEntity<>( HttpStatus.ACCEPTED);
     }
 }

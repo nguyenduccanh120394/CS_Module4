@@ -20,16 +20,22 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public Optional<Answer> findById(Long id) {
-        return Optional.empty();
+        return answerRepository.findById(id);
     }
 
     @Override
     public Answer save(Answer answer) {
-        return null;
+        return answerRepository.save(answer);
     }
 
     @Override
     public void remove(Long id) {
+        answerRepository.deleteById(id);
 
+    }
+
+    @Override
+    public Iterable<Answer> findAllByQuestion(Long id) {
+        return answerRepository.findAllByQuestion(id);
     }
 }
