@@ -15,5 +15,4 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     Iterable<User> SortByAddress();
     @Query(value = "from User order by username ASC ")
     Iterable<User> SortByUsername();
-    Iterable<User> findAllByRoles();
 }
