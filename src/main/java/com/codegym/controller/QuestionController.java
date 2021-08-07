@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/questions")
+@CrossOrigin("*")
 public class QuestionController {
-    @Autowired
-    IAnswerService answerService;
 
     @Autowired
     IQuestionService questionService;
@@ -29,8 +28,7 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Question> create(@RequestBody Question question, Answer answer1){
-        answerService.save(answer1);
+    public ResponseEntity<Question> create(@RequestBody Question question){
         return new ResponseEntity<>(questionService.save(question), HttpStatus.OK);
     }
 
