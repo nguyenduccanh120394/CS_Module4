@@ -52,4 +52,19 @@ public class UserService implements IUserService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public Iterable<User> findByUsernameContaining(String username) {
+        return userRepository.findByUsernameContaining(username);
+    }
+
+    @Override
+    public Iterable<User> sortByAddress() {
+        return userRepository.SortByAddress();
+    }
+
+    @Override
+    public Iterable<User> sortByUsername() {
+        return userRepository.SortByUsername();
+    }
 }
