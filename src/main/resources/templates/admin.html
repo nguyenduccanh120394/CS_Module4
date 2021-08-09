@@ -53,6 +53,11 @@
         }
     </style>
     <script type="text/javascript">
+        function error403(){
+            if (localStorage.getItem('token')==null){
+                window.location.href="error403.html"
+            }
+        }
         function loadData(){
                 $.ajax({
                     type:"GET",
@@ -60,7 +65,8 @@
                     headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         listUser(data)
-                    }
+                    },
+                    error:error403(),
                 })
             }
             function info(id){
@@ -267,6 +273,7 @@
                     success:function (data){
                         let str=`<div class="col-sm-12 col-xl-12 col-xxl-12 text-center">
                                 <img src="${data.image}" width="40" height="40" class="rounded-circle mt-2" alt="" style="margin:15px;">
+                                <a onclick="logout()">Logout</a>
                                 <a>${data.username}</a>
 
                                 </div>`
@@ -302,17 +309,26 @@
                         document.getElementById('listUser').innerHTML=str;
                 }
             }
+            function logout(){
+            localStorage.clear();
+            window.location.href="login.html";
+            loadPage()
+            }
     </script>
 </head>
 <body onload="loadData()">
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
-                <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  User Management
-            </a>
-            <div id="admin">Login</div>
-        </div>
+                <div>
+                    <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
+                        <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  User Management
+                    </a>
+                </div>
+                    <div>
+                        <a  id="admin" href="login.html">Login</a>
+                    </div>
+                </div>
     </nav>
     <div class="container-fluid p-0">
         <div class="row">
