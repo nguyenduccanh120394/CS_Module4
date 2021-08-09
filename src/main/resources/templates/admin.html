@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>User Management</title>
+    <style>
+        body{margin-top:20px;
+            background-color: #f7f7fc;
+        }
+        .card {
+            margin-bottom: 24px;
+            box-shadow: 0 0 0.875rem 0 rgba(33,37,41,.05);
+        }
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: initial;
+            border: 0 solid transparent;
+            border-radius: .25rem;
+        }
+        .card-body {
+            flex: 1 1 auto;
+            padding: 1.25rem;
+        }
+        .card-header:first-child {
+            border-radius: .25rem .25rem 0 0;
+        }
+        .card-header {
+            border-bottom-width: 1px;
+        }
+        .pb-0 {
+            padding-bottom: 0!important;
+        }
+        .card-header {
+            padding: 1rem 1.25rem;
+            margin-bottom: 0;
+            background-color: #fff;
+            border-bottom: 0 solid transparent;
+        }
+        .fm-menu .list-group a {
+            font-size: 16px;
+            color: #5f5f5f;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <script type="text/javascript">
+        function loadData(){
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/users",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        listUser(data)
+                    }
+                })
+            }
+            function info(id){
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/"+id,
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        let info=`<div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <h5 class="card-title mb-0">${data.fullName}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-sm-12 col-xl-12 col-xxl-12 text-center">
+                                <img src="${data.image}" width="100" height="100" class="rounded-circle mt-2" alt="" style="margin:15px;">
+                                <input type="hidden" value="${data.image}" id="image">
+                            </div>
+                        </div>
+                        <table class="table table-sm mt-2 mb-4" id="test">
+                            <tbody>
+                            <tr>
+                                <th>User ID</th>
+                                <td><input type="text" id="id" name="id" value="${data.id}" readonly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>User Name</th>
+                                <td><input type="text" id="username" name="username" value="${data.username}" readonly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>Password</th>
+                                <td><input type="password" id="password" name="password" value="${data.password}" readonly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>Full Name</th>
+                                <td><input type="text" id="fullName" name="fullName" value="${data.fullName}" readOnly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td><input type="text" id="address" name="address" value="${data.address}" readonly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td><input type="text" id="email" name="email" value="${data.email}" readonly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>Phone</th>
+                                <td><input type="text" id="phone" name="phone" value="${data.phone}" readOnly="readonly" style="border: none"></td>
+                            </tr>
+                            <tr>
+                                <th>Role</th>
+                                <td id="roles">
+                                       ${data.roles[0].name}
+                                <button class="btn btn-light btn-small" onclick="updateRole()"><img src="https://image.flaticon.com/icons/png/128/4411/4411468.png" width="25" height="25"></button>
+                                <button class="btn btn-light btn-small" onclick="deleteUser(${data.id})"><img src="https://image.flaticon.com/icons/png/128/3096/3096687.png" width="25" height="25"></button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>`
+                        document.getElementById('right').innerHTML=info;
+                        }
+                    })
+            }
+            function updateRole(){
+                let roles=`<select class="form-select" aria-label="Default select example" id="roles1">
+                           </select>
+                            <hr>
+                           <input type="submit" class="btn btn-warning btn-small" value="Cancel" onclick="loadPage()">
+                           <input type="submit" class="btn btn-info btn-small" value="Save" onclick="edit()">`
+                document.getElementById('roles').innerHTML = roles;
+                getRole()
+            }
+            function loadPage(){
+                location.reload()
+            }
+            function getRole(){
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/roles",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        let roles=``;
+                        for (let i = 0; i < data.length; i++) {
+                            roles+=`<option value="${data[i].id}">${data[i].name}</option>`
+                        }
+                        document.getElementById('roles1').innerHTML=roles;
+                    }
+                })
+            }
+            function edit(){
+                let id =$('#id').val();
+                let username =$('#username').val();
+                let password =$('#password').val();
+                let fullName =$('#fullName').val();
+                let email =$('#email').val();
+                let address =$('#address').val();
+                let phone =$('#phone').val();
+                let image =$('#image').val();
+                let role = $('#roles1').val();
+                let user=   {
+                                "username": username,
+                                "password": password,
+                                "fullName": fullName,
+                                "email": email,
+                                "address": address,
+                                "phone": phone,
+                                "image": image,
+                                "roles": [
+                                    {
+                                        "id": role
+                                    }
+                                ]
+                            }
+                let upRole = confirm("Thay đổi Role sẽ thay đổi quyền truy cập của User!!")
+                let mes;
+                if (upRole==true){
+                    $.ajax({
+                        headers:{
+                            'Accept':'application/json',
+                            'Content-Type':'application/json',
+                            "Authorization": 'Bearer '+localStorage.getItem('token'),
+                        },
+                        type:'PUT',
+                        url:"http://localhost:8080/admin/"+id,
+                        data:JSON.stringify(user),
+                        success:loadData
+                    });
+                            mes=`Update Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+                }else {
+                            mes=`Cancel Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+                }
+                        document.getElementById('roles' +
+                            '').innerHTML=mes;
+            }
+            function deleteUser(id){
+                let mes;
+                let del = confirm("Sau khi xóa data User sẽ mất hết!");
+                if (del == true) {
+                    mes=`Delete Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+                    $.ajax({
+                        type: "DELETE",
+                        url: "http://localhost:8080/admin/"+id,
+                        headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                        success:loadData,
+                    });
+                } else {
+                    mes="";
+                    }
+                document.getElementById('notification').innerHTML=mes;
+            }
+            function searchUser(){
+                let key = $('#key').val()
+                let total;
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/username?key="+key,
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        total=`<h6><img src="https://image.flaticon.com/icons/png/128/1250/1250673.png" width="20" height="20">Có ` +data.length+ ` kết quả được tìm thấy</h6>`;
+                        listUser(data)
+                        document.getElementById('resultSearch').innerHTML=total;
+                    }
+                })
+            }
+            function sortByAddress(){
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/address",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        listUser(data)
+                    }
+                })
+            }
+            function changeSort() {
+                let x = document.getElementById("selectSort").value;
+                if (x=="address"){
+                    sortByAddress()
+                }
+                if (x=="username"){
+                    sortByUsername()
+                }
+            }
+            function sortByUsername(){
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/names",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        listUser(data)
+                    }
+                })
+            }
+           function infoAdmin(){
+                let id=localStorage.getItem('id');
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/"+id,
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        let str=`<div class="col-sm-12 col-xl-12 col-xxl-12 text-center">
+                                <img src="${data.image}" width="40" height="40" class="rounded-circle mt-2" alt="" style="margin:15px;">
+                                <a>${data.username}</a>
+
+                                </div>`
+                        console.log(data.username)
+                        document.getElementById('admin').innerHTML=str
+                    }
+                })
+
+            }
+            function listUser(data){
+                let str =`<thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User Name</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Phone</th>
+                                <th>Roles</th>
+                            </tr>
+                                </thead>`
+                for (let i = 0; i < data.length; i++) {
+                    str+=`
+                            <tr onclick="info(${data[i].id})">
+                                <td>${data[i].id}</td>
+                                <td>${data[i].username}</td>
+                                <td>${data[i].fullName}</td>
+                                <td>${data[i].email}</td>
+                                <td>${data[i].address}</td>
+                                <td>${data[i].phone}</td>
+                                <td>${data[i].roles[0].name}</td>
+                            </tr> `,
+                        document.getElementById('listUser').innerHTML=str;
+                }
+            }
+    </script>
+</head>
+<body onload="loadData()">
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
+                <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  User Management
+            </a>
+            <div id="admin">Login</div>
+        </div>
+    </nav>
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-xl-2">
+                <div class="card" style="height: 750px">
+                    <div class="card-header pb-0">
+                        <form class="d-flex">
+                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="key">
+                                    <a class="btn btn-outline-success" type="submit" onclick="searchUser()">
+                                        Search
+                                    </a></br>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div id="resultSearch"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-7">
+
+                <div class="card" style="height: 750px">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-title mb-0"><img src="https://img.icons8.com/ios/2x/double-tap-gesture.gif" height="30" width="30"> Click on the lines to see detailed information</h5>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                                <div class="select-container">
+                                    <select class="custom-select" style="border-radius: 5%;border: darkgrey " id="selectSort" onchange="changeSort()">
+                                        <option>Select Sort By</option>
+                                        <option value="address">Address</option>
+                                        <option value="username">User Name</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 id="notification" style="text-align: center"></h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover" style="width:100%" id="listUser">
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3">
+                <div class="card" id="right" style="height:750px">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

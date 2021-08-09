@@ -8,4 +8,8 @@ import java.util.Optional;
 
 public interface IUserService extends IGeneralService<User>, UserDetailsService {
     Optional<User> findByUsername(String username);
+    Iterable<User> findByUsernameContaining(String username);
+    Iterable<User> sortByAddress();
+    Iterable<User> sortByUsername();
+
 }
