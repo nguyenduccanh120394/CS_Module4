@@ -53,10 +53,11 @@
         }
     </style>
     <script type="text/javascript">
-            function loadData(){
+        function loadData(){
                 $.ajax({
                     type:"GET",
                     url:"http://localhost:8080/admin/users",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         listUser(data)
                     }
@@ -66,6 +67,7 @@
                 $.ajax({
                     type:"GET",
                     url:"http://localhost:8080/admin/"+id,
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         let info=`<div class="card-header">
                         <div class="row">
@@ -143,6 +145,7 @@
                 $.ajax({
                     type:"GET",
                     url:"http://localhost:8080/admin/roles",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         let roles=``;
                         for (let i = 0; i < data.length; i++) {
@@ -183,17 +186,19 @@
                         headers:{
                             'Accept':'application/json',
                             'Content-Type':'application/json',
+                            "Authorization": 'Bearer '+localStorage.getItem('token'),
                         },
                         type:'PUT',
                         url:"http://localhost:8080/admin/"+id,
                         data:JSON.stringify(user),
-                        success:loadData()
+                        success:loadData
                     });
                             mes=`Update Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
                 }else {
                             mes=`Cancel Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
                 }
-                        document.getElementById('roles').innerHTML=mes;
+                        document.getElementById('roles' +
+                            '').innerHTML=mes;
             }
             function deleteUser(id){
                 let mes;
@@ -203,6 +208,7 @@
                     $.ajax({
                         type: "DELETE",
                         url: "http://localhost:8080/admin/"+id,
+                        headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                         success:loadData,
                     });
                 } else {
@@ -216,6 +222,7 @@
                 $.ajax({
                     type:"GET",
                     url:"http://localhost:8080/admin/username?key="+key,
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         total=`<h6><img src="https://image.flaticon.com/icons/png/128/1250/1250673.png" width="20" height="20">Có ` +data.length+ ` kết quả được tìm thấy</h6>`;
                         listUser(data)
@@ -227,6 +234,7 @@
                 $.ajax({
                     type:"GET",
                     url:"http://localhost:8080/admin/address",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         listUser(data)
                     }
@@ -245,10 +253,29 @@
                 $.ajax({
                     type:"GET",
                     url:"http://localhost:8080/admin/names",
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
                     success:function (data){
                         listUser(data)
                     }
                 })
+            }
+           function infoAdmin(){
+                let id=localStorage.getItem('id');
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8080/admin/"+id,
+                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                    success:function (data){
+                        let str=`<div class="col-sm-12 col-xl-12 col-xxl-12 text-center">
+                                <img src="${data.image}" width="40" height="40" class="rounded-circle mt-2" alt="" style="margin:15px;">
+                                <a>${data.username}</a>
+
+                                </div>`
+                        console.log(data.username)
+                        document.getElementById('admin').innerHTML=str
+                    }
+                })
+
             }
             function listUser(data){
                 let str =`<thead>
@@ -280,10 +307,15 @@
 </head>
 <body onload="loadData()">
 <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
+                <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  User Management
+            </a>
+            <div id="admin">Login</div>
+        </div>
+    </nav>
     <div class="container-fluid p-0">
-        <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
-            <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35">  User Management
-        </a>
         <div class="row">
             <div class="col-xl-2">
                 <div class="card" style="height: 750px">
