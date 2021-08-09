@@ -32,4 +32,9 @@ public class QuizService implements IQuizService{
     public void remove(Long id) {
         quizRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Quiz> findByName(String name) {
+        return quizRepository.findByName(name);
+    }
 }
