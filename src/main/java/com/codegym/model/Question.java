@@ -24,7 +24,6 @@ public class Question {
         this.content = content;
         this.questionCategory = questionCategory;
     }
-
     public Question() {
     }
 

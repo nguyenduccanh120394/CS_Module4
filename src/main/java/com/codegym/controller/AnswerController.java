@@ -24,7 +24,7 @@ public class AnswerController {
         return new ResponseEntity<>(answerService.findAllByQuestion(id), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<Answer> create(@RequestBody Answer answer){
         return new ResponseEntity<>(answerService.save(answer), HttpStatus.OK);
     }
@@ -34,12 +34,12 @@ public class AnswerController {
         return new ResponseEntity<>(answerService.findById(id).get(), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("")
+    @PutMapping("/edit")
     public ResponseEntity<Answer> edit(@RequestBody Answer answer){
         return new ResponseEntity<>(answerService.save(answer), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/delete")
     public ResponseEntity<Answer> remove(@RequestParam Long id){
         answerService.remove(id);
         return new ResponseEntity<>( HttpStatus.ACCEPTED);
