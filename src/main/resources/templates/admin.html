@@ -53,23 +53,29 @@
         }
     </style>
     <script type="text/javascript">
-        function loadData(){
-                $.ajax({
-                    type:"GET",
-                    url:"http://localhost:8080/admin/users",
-                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        listUser(data)
-                    }
-                })
+        function error403(){
+            if (localStorage.getItem('token')==null){
+                window.location.href="error403.html"
             }
-            function info(id){
-                $.ajax({
-                    type:"GET",
-                    url:"http://localhost:8080/admin/"+id,
-                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        let info=`<div class="card-header">
+        }
+        function loadData(){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/users",
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    listUser(data)
+                },
+                error:error403(),
+            })
+        }
+        function info(id){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/"+id,
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    let info=`<div class="card-header">
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <h5 class="card-title mb-0">${data.fullName}</h5>
@@ -124,160 +130,161 @@
                             </tbody>
                         </table>
                     </div>`
-                        document.getElementById('right').innerHTML=info;
-                        }
-                    })
-            }
-            function updateRole(){
-                let roles=`<select class="form-select" aria-label="Default select example" id="roles1">
+                    document.getElementById('right').innerHTML=info;
+                }
+            })
+        }
+        function updateRole(){
+            let roles=`<select class="form-select" aria-label="Default select example" id="roles1">
                            </select>
                             <hr>
                            <input type="submit" class="btn btn-warning btn-small" value="Cancel" onclick="loadPage()">
                            <input type="submit" class="btn btn-info btn-small" value="Save" onclick="edit()">`
-                document.getElementById('roles').innerHTML = roles;
-                getRole()
-            }
-            function loadPage(){
-                location.reload()
-            }
-            function getRole(){
-                $.ajax({
-                    type:"GET",
-                    url:"http://localhost:8080/admin/roles",
-                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        let roles=``;
-                        for (let i = 0; i < data.length; i++) {
-                            roles+=`<option value="${data[i].id}">${data[i].name}</option>`
-                        }
-                        document.getElementById('roles1').innerHTML=roles;
+            document.getElementById('roles').innerHTML = roles;
+            getRole()
+        }
+        function loadPage(){
+            location.reload()
+        }
+        function getRole(){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/roles",
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    let roles=``;
+                    for (let i = 0; i < data.length; i++) {
+                        roles+=`<option value="${data[i].id}">${data[i].name}</option>`
                     }
-                })
-            }
-            function edit(){
-                let id =$('#id').val();
-                let username =$('#username').val();
-                let password =$('#password').val();
-                let fullName =$('#fullName').val();
-                let email =$('#email').val();
-                let address =$('#address').val();
-                let phone =$('#phone').val();
-                let image =$('#image').val();
-                let role = $('#roles1').val();
-                let user=   {
-                                "username": username,
-                                "password": password,
-                                "fullName": fullName,
-                                "email": email,
-                                "address": address,
-                                "phone": phone,
-                                "image": image,
-                                "roles": [
-                                    {
-                                        "id": role
-                                    }
-                                ]
-                            }
-                let upRole = confirm("Thay đổi Role sẽ thay đổi quyền truy cập của User!!")
-                let mes;
-                if (upRole==true){
-                    $.ajax({
-                        headers:{
-                            'Accept':'application/json',
-                            'Content-Type':'application/json',
-                            "Authorization": 'Bearer '+localStorage.getItem('token'),
-                        },
-                        type:'PUT',
-                        url:"http://localhost:8080/admin/"+id,
-                        data:JSON.stringify(user),
-                        success:loadData
-                    });
-                            mes=`Update Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
-                }else {
-                            mes=`Cancel Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+                    document.getElementById('roles1').innerHTML=roles;
                 }
-                        document.getElementById('roles' +
-                            '').innerHTML=mes;
-            }
-            function deleteUser(id){
-                let mes;
-                let del = confirm("Sau khi xóa data User sẽ mất hết!");
-                if (del == true) {
-                    mes=`Delete Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
-                    $.ajax({
-                        type: "DELETE",
-                        url: "http://localhost:8080/admin/"+id,
-                        headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                        success:loadData,
-                    });
-                } else {
-                    mes="";
+            })
+        }
+        function edit(){
+            let id =$('#id').val();
+            let username =$('#username').val();
+            let password =$('#password').val();
+            let fullName =$('#fullName').val();
+            let email =$('#email').val();
+            let address =$('#address').val();
+            let phone =$('#phone').val();
+            let image =$('#image').val();
+            let role = $('#roles1').val();
+            let user=   {
+                "username": username,
+                "password": password,
+                "fullName": fullName,
+                "email": email,
+                "address": address,
+                "phone": phone,
+                "image": image,
+                "roles": [
+                    {
+                        "id": role
                     }
-                document.getElementById('notification').innerHTML=mes;
+                ]
             }
-            function searchUser(){
-                let key = $('#key').val()
-                let total;
+            let upRole = confirm("Thay đổi Role sẽ thay đổi quyền truy cập của User!!")
+            let mes;
+            if (upRole==true){
                 $.ajax({
-                    type:"GET",
-                    url:"http://localhost:8080/admin/username?key="+key,
-                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        total=`<h6><img src="https://image.flaticon.com/icons/png/128/1250/1250673.png" width="20" height="20">Có ` +data.length+ ` kết quả được tìm thấy</h6>`;
-                        listUser(data)
-                        document.getElementById('resultSearch').innerHTML=total;
-                    }
-                })
-            }
-            function sortByAddress(){
-                $.ajax({
-                    type:"GET",
-                    url:"http://localhost:8080/admin/address",
-                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        listUser(data)
-                    }
-                })
-            }
-            function changeSort() {
-                let x = document.getElementById("selectSort").value;
-                if (x=="address"){
-                    sortByAddress()
-                }
-                if (x=="username"){
-                    sortByUsername()
-                }
-            }
-            function sortByUsername(){
-                $.ajax({
-                    type:"GET",
-                    url:"http://localhost:8080/admin/names",
-                    headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        listUser(data)
-                    }
-                })
-            }
-           function infoAdmin(){
-                let id=localStorage.getItem('id');
-                $.ajax({
-                    type:"GET",
+                    headers:{
+                        'Accept':'application/json',
+                        'Content-Type':'application/json',
+                        "Authorization": 'Bearer '+localStorage.getItem('token'),
+                    },
+                    type:'PUT',
                     url:"http://localhost:8080/admin/"+id,
+                    data:JSON.stringify(user),
+                    success:loadData
+                });
+                mes=`Update Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+            }else {
+                mes=`Cancel Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+            }
+            document.getElementById('roles' +
+                '').innerHTML=mes;
+        }
+        function deleteUser(id){
+            let mes;
+            let del = confirm("Sau khi xóa data User sẽ mất hết!");
+            if (del == true) {
+                mes=`Delete Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
+                $.ajax({
+                    type: "DELETE",
+                    url: "http://localhost:8080/admin/"+id,
                     headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
-                    success:function (data){
-                        let str=`<div class="col-sm-12 col-xl-12 col-xxl-12 text-center">
+                    success:loadData,
+                });
+            } else {
+                mes="";
+            }
+            document.getElementById('notification').innerHTML=mes;
+        }
+        function searchUser(){
+            let key = $('#key').val()
+            let total;
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/username?key="+key,
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    total=`<h6><img src="https://image.flaticon.com/icons/png/128/1250/1250673.png" width="20" height="20">Có ` +data.length+ ` kết quả được tìm thấy</h6>`;
+                    listUser(data)
+                    document.getElementById('resultSearch').innerHTML=total;
+                }
+            })
+        }
+        function sortByAddress(){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/address",
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    listUser(data)
+                }
+            })
+        }
+        function changeSort() {
+            let x = document.getElementById("selectSort").value;
+            if (x=="address"){
+                sortByAddress()
+            }
+            if (x=="username"){
+                sortByUsername()
+            }
+        }
+        function sortByUsername(){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/names",
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    listUser(data)
+                }
+            })
+        }
+        function infoAdmin(){
+            let id=localStorage.getItem('id');
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/admin/"+id,
+                headers: { "Authorization": 'Bearer '+localStorage.getItem('token') },
+                success:function (data){
+                    let str=`<div class="col-sm-12 col-xl-12 col-xxl-12 text-center">
                                 <img src="${data.image}" width="40" height="40" class="rounded-circle mt-2" alt="" style="margin:15px;">
+                                <a onclick="logout()">Logout</a>
                                 <a>${data.username}</a>
 
                                 </div>`
-                        console.log(data.username)
-                        document.getElementById('admin').innerHTML=str
-                    }
-                })
+                    console.log(data.username)
+                    document.getElementById('admin').innerHTML=str
+                }
+            })
 
-            }
-            function listUser(data){
-                let str =`<thead>
+        }
+        function listUser(data){
+            let str =`<thead>
                             <tr>
                                 <th>ID</th>
                                 <th>User Name</th>
@@ -288,8 +295,8 @@
                                 <th>Roles</th>
                             </tr>
                                 </thead>`
-                for (let i = 0; i < data.length; i++) {
-                    str+=`
+            for (let i = 0; i < data.length; i++) {
+                str+=`
                             <tr onclick="info(${data[i].id})">
                                 <td>${data[i].id}</td>
                                 <td>${data[i].username}</td>
@@ -299,19 +306,28 @@
                                 <td>${data[i].phone}</td>
                                 <td>${data[i].roles[0].name}</td>
                             </tr> `,
-                        document.getElementById('listUser').innerHTML=str;
-                }
+                    document.getElementById('listUser').innerHTML=str;
             }
+        }
+        function logout(){
+            localStorage.clear();
+            window.location.href="login.html";
+            loadPage()
+        }
     </script>
 </head>
 <body onload="loadData()">
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
-                <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  User Management
-            </a>
-            <div id="admin">Login</div>
+            <div>
+                <a class="h3 mb-3" onclick="loadPage()" style="text-decoration: none; color: black">
+                    <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  User Management
+                </a>
+            </div>
+            <div>
+                <a  id="admin" href="login.html">Login</a>
+            </div>
         </div>
     </nav>
     <div class="container-fluid p-0">
@@ -320,10 +336,10 @@
                 <div class="card" style="height: 750px">
                     <div class="card-header pb-0">
                         <form class="d-flex">
-                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="key">
-                                    <a class="btn btn-outline-success" type="submit" onclick="searchUser()">
-                                        Search
-                                    </a></br>
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="key">
+                            <a class="btn btn-outline-success" type="submit" onclick="searchUser()">
+                                Search
+                            </a></br>
                         </form>
                     </div>
                     <div class="card-body">
