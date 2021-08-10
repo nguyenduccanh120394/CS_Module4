@@ -3,6 +3,8 @@ package com.codegym.service.quizComponent;
 import com.codegym.model.QuizComponent;
 import com.codegym.repository.IQuizComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -31,5 +33,11 @@ public class QuizComponentService implements IQuizComponentService {
     @Override
     public void remove(Long id) {
         quizComponentRepository.deleteById(id);
+    }
+
+
+    @Override
+    public Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable) {
+        return quizComponentRepository.searchByIdQuiz(id, pageable);
     }
 }
