@@ -81,16 +81,19 @@
                 url:"http://localhost:8080/api/login",
                 data:JSON.stringify(user),
                 success: function (data) {
+                    console.log(data)
                     localStorage.setItem('token',data.accessToken)
                     localStorage.setItem('id',data.id)
+                    localStorage.setItem('username',data.username)
                     localStorage.setItem('roles',data.roles[0].authority)
-                    if (data.roles[0].authority=="ROLE_ADMIN"){
-                        console.log(data)
-                        window.location.href="admin.html"
-                    }if (data.roles[0].authority=="ROLE_USER"){
-                        console.log(data)
-                        // window.location.href="admin.html"
-                    }
+                    window.location.href="home.html";
+                    // if (data.roles[0].authority=="ROLE_ADMIN"){
+                    //     console.log(data)
+                    //     window.location.href="admin.html"
+                    // }if (data.roles[0].authority=="ROLE_USER"){
+                    //     console.log(data)
+                    //     // window.location.href="admin.html"
+                    // }
 
                 },
                 error: function(xhr, status, error) {
