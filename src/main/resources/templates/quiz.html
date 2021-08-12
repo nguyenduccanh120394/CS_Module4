@@ -243,8 +243,8 @@
                     <h6 id="notification" style="padding-left: 20px"></h6>
                 </div>
                 <div class="card-body">
-                    <div class="row" id="mid">
-                    </div>
+                    <div class="row" id="top"></div>
+                    <div class="row" id="mid"></div>
                 </div>
             </div>
         </div>
@@ -253,6 +253,7 @@
             <div class="card" style="height:750px">
                 <div class="card" id="right"></div>
                 <div class="row" id="caroQuestion"></div>
+
             </div>
         </div>
     </div>
@@ -483,7 +484,7 @@
         console.log(data.content[0].quiz)
         getAnswer(idQuestion, data.content[0].quiz.id, page);
         content += "</table>";
-        document.getElementById('main').innerHTML = content;
+        document.getElementById('top').innerHTML = content;
 
 
         let str = "";
@@ -554,6 +555,7 @@
                 trueAnswer++;
                 if (isLastQuestion == true) {
                     alert("your core is " + score + ", true " + trueAnswer + ", false " + falseAnswer);
+                    loadPage()
                     createExam(localStorage.getItem('id'), idQuiz, score);
                     setDefault();
                 } else {
