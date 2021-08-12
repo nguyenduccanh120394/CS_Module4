@@ -248,6 +248,7 @@
                 }
             });
         }
+
         function showFormAddQuestion(){
             let str=`<form class="form-control">
                        <h5><b>Create New Question</b></h5>
@@ -257,7 +258,7 @@
                       </div>
                       <div class="mb-3">
                         <label for="category" class="form-label">Category</label>
-                        <select class="form-select" aria-label="Default select example" id="category">`
+                        <select class="form-select"  id="category">`
                           +getCategoryQuestion()+
                         `</select>
                       </div>
@@ -275,23 +276,23 @@
                                     "id": category
                                 }
                             }
-                            alert(content+"/"+question)
                          $.ajax({
                                 headers:{
                                  'Accept':'application/json',
                                  'Content-Type':'application/json',
                                 },
                                 type:"POST",
-                                url:"http://localhost:8080/api/question/create",
+                                url:"http://localhost:8080/api/questions/create",
                                 data:JSON.stringify(question),
                                 success:function (data){
-                                    console.log(data)
+                                    loadPage()
                                 }
                          })
         }
+
     </script>
 </head>
-<body onload="loadData()">
+<body onload="loadData();infoAdmin()">
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -300,9 +301,8 @@
                     <img src="https://image.flaticon.com/icons/png/128/3135/3135961.png" height="35" width="35" onload="infoAdmin()">  Question Management
                 </a>
             </div>
-            <div>
-                <a  id="admin" href="login.html">Login</a>
-            </div>
+            <div id="admin">
+git             </div>
         </div>
     </nav>
     <div class="container-fluid p-0">
