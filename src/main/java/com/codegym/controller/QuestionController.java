@@ -32,6 +32,7 @@ public class QuestionController {
     }
     @PostMapping("")
     public ResponseEntity<Question> findById(@RequestParam Long id){
+        System.out.println(id);
         return new ResponseEntity<>(questionService.findById(id).get(), HttpStatus.ACCEPTED);
     }
 
