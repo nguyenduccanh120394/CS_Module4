@@ -6,8 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IQuizService extends IGeneralService<Quiz> {
-    public Iterable<Quiz> findByName(String name);
-    Iterable<Quiz>findByNameContaining(String name);
-    Page<Quiz> findAll(Pageable pageable);
+    Iterable<Quiz> findByName(String name);
 
+    Iterable<Quiz> findByNameContaining(String name);
+
+    Page<Quiz> findAll(Pageable pageable);
 }
