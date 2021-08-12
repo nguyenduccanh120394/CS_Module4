@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
     <style>
         body{
             margin-top:20px;
@@ -81,13 +81,20 @@
                 url:"http://localhost:8080/api/login",
                 data:JSON.stringify(user),
                 success: function (data) {
+                    console.log(data)
                     localStorage.setItem('token',data.accessToken)
                     localStorage.setItem('id',data.id)
+                    localStorage.setItem('username',data.username)
                     localStorage.setItem('roles',data.roles[0].authority)
-                    if (data.roles[0].authority=="ROLE_ADMIN"){
-                        console.log(data)
-                        window.location.href="admin.html"
-                    }
+                    window.location.href="home.html";
+                    // if (data.roles[0].authority=="ROLE_ADMIN"){
+                    //     console.log(data)
+                    //     window.location.href="admin.html"
+                    // }if (data.roles[0].authority=="ROLE_USER"){
+                    //     console.log(data)
+                    //     // window.location.href="admin.html"
+                    // }
+
                 },
                 error: function(xhr, status, error) {
                     let err = JSON.parse(xhr.responseText);
@@ -114,13 +121,14 @@
         function showFormRegister(){
             let str=`<form class="form-control" style="background-color: white">
                             <h2 style="text-align: center">Register</h2>
+                            <h6 id="message" style="text-align: center"></h6>
                             <div class="mb-3">
                                 <b for="username" class="form-label">User Name</b>
-                                <input type="text" class="form-control" id="username" aria-describedby="emailHelp">
+                                <input type="text" class="form-control" id="newUserName" aria-describedby="emailHelp">
                             </div>
                             <div class="mb-3">
                                 <b for="password" class="form-label">Password</b>
-                                <input type="password" class="form-control" id="password">
+                                <input type="password" class="form-control" id="newPassword">
                             </div>
                             <div class="mb-3">
                                 <b for="selectAddress" class="form-label">Address</b>
@@ -142,10 +150,47 @@
                                  <b for="email" class="form-label">Avatar</b>
                                 <input type="file" class="form-control" id="image">
                             </div>
-                            <a class="btn btn-primary">Create</a>
+                            <a class="btn btn-primary" onclick="register()">Create</a>
                             <a href="login.html" class="btn btn-primary">Back to Login</a>
                     </form>`
             document.getElementById('register').innerHTML=str;
+        }
+        function register(){
+            let newUserName=$('#newUserName').val()
+            let newPassword=$('#newPassword').val()
+            let fullName=$('#fullName').val()
+            let email=$('#email').val()
+            let address=$('#selectAddress').val()
+            let phone=$('#phone').val()
+            // let image=$('#image').val()
+            alert(newUserName+"/"+newPassword+"/"+fullName+"/"+email+"/"+address+"/"+phone)
+            let newUser={
+                "username": newUserName,
+                "password": newPassword,
+                "fullName": fullName,
+                "email": email,
+                "address": address,
+                "phone": phone,
+                "image": "https://bootdey.com/img/Content/avatar/avatar1.png",
+                "roles": [
+                    {
+                        "id": 3
+                    }
+                ]
+            }
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                type:"POST",
+                url:"http://localhost:8080/users",
+                data: JSON.stringify(newUser),
+                success:function () {
+                    let mes=`Register Success`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" height="30" width="30">`
+                    document.getElementById('message').innerHTML=mes;
+                }
+            })
         }
     </script>
 

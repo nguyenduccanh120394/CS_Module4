@@ -1,5 +1,6 @@
 package com.codegym.service.quizComponent;
 
+import com.codegym.model.Quiz;
 import com.codegym.model.QuizComponent;
 import com.codegym.repository.IQuizComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,15 @@ public class QuizComponentService implements IQuizComponentService {
 
 
     @Override
-    public Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable) {
-        return quizComponentRepository.searchByIdQuiz(id, pageable);
+    public Iterable<QuizComponent> findByQuiz(Optional<Quiz> quiz) {
+        return quizComponentRepository.findByQuiz(quiz);
+
     }
+
+    @Override
+    public Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable) {
+            return quizComponentRepository.searchByIdQuiz(id, pageable);
+        }
 
     @Override
     public Iterable<QuizComponent> getAllQuesById(Long id) {

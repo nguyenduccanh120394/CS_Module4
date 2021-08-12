@@ -3,6 +3,8 @@ package com.codegym.service.question;
 import com.codegym.model.Question;
 import com.codegym.repository.IQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,5 +36,15 @@ public class QuestionService implements IQuestionService{
     @Override
     public Iterable<Question> findByCategory(String category) {
         return questionRepository.findByCategory(category);
+    }
+
+    @Override
+    public Page<Question> findAll(Pageable pageable) {
+        return questionRepository.findAll(pageable);
+    }
+
+    @Override
+    public Iterable<Question> findAllByQuestionCategoryId(Long questionCategoryId) {
+        return questionRepository.findAllByQuestionCategoryId(questionCategoryId);
     }
 }

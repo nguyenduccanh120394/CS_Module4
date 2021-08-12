@@ -22,7 +22,15 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    public User() {
+    public User(String username, String password, String fullName, String email, String address, String phone, String image, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.image = image;
+        this.roles = roles;
     }
 
     public User(Long id, String username, String password, String fullName, String email, String address, String phone, String image, Set<Role> roles) {
@@ -35,6 +43,10 @@ public class User {
         this.phone = phone;
         this.image = image;
         this.roles = roles;
+    }
+
+    public User() {
+
     }
 
     public Long getId() {
