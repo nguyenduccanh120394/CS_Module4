@@ -232,6 +232,63 @@
             window.location.href="login.html";
             loadPage()
         }
+        function getCategoryQuestion(){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/api/questionCategories",
+                success:function (data){
+                    console.log(data)
+                    let category=``
+                    for (let i = 0; i < data.length; i++) {
+                        category+=`<option value="${data[i].id}">${data[i].name}</option>`
+                        document.getElementById('category').innerHTML=category;
+                        console.log(data[i].id)
+                    }
+
+                }
+            });
+        }
+        function showFormAddQuestion(){
+            let str=`<form class="form-control">
+                       <h5><b>Create New Question</b></h5>
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Content</label>
+                        <input type="text" class="form-control" id="content">
+                      </div>
+                      <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" aria-label="Default select example" id="category">`
+                          +getCategoryQuestion()+
+                        `</select>
+                      </div>
+                      <a type="submit" class="btn btn-primary" onclick="createQuestion()">Create</a>
+                    </form>`
+            document.getElementById('right').innerHTML=str;
+        }
+        function createQuestion(){
+            let content= $('#content').val()
+            let category=document.getElementById('category').value
+            console.log(category)
+            let question=   {
+                                "content": content,
+                                "questionCategory": {
+                                    "id": category
+                                }
+                            }
+                            alert(content+"/"+question)
+                         $.ajax({
+                                headers:{
+                                 'Accept':'application/json',
+                                 'Content-Type':'application/json',
+                                },
+                                type:"POST",
+                                url:"http://localhost:8080/api/question/create",
+                                data:JSON.stringify(question),
+                                success:function (data){
+                                    console.log(data)
+                                }
+                         })
+        }
     </script>
 </head>
 <body onload="loadData()">
@@ -275,7 +332,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Home">
+                        <a href="home.html" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Home">
                             <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
                                 <div class="card-body text-center">
                                     <div class="text-center">
@@ -293,11 +350,11 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="questionManagement.html" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Question Management">
+                        <a href="admin.html" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut User Management">
                             <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
                                 <div class="card-body text-center">
                                     <div class="text-center">
-                                        <img src="https://image.flaticon.com/icons/png/128/2538/2538036.png" width="40" height="40">
+                                        <img src="https://image.flaticon.com/icons/png/128/3126/3126589.png" width="40" height="40">
                                     </div>
                                 </div>
                             </div>
@@ -316,7 +373,7 @@
                             <div class="col-md-3">
                                 <form class="d-flex">
                                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="key">
-                                    <a class="btn btn-outline-success" type="submit" onclick="searchUser()">
+                                    <a class="btn btn-outline-success" type="submit" >
                                         Search
                                     </a></br>
                                 </form>
@@ -331,7 +388,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <button type="button" class="btn btn-outline-success">Add </button>
+                                <button type="button" class="btn btn-outline-success" onclick="showFormAddQuestion()">Add </button>
                             </div>
                         </div>
                     </div>

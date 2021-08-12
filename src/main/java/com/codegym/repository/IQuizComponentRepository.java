@@ -15,7 +15,6 @@ public interface IQuizComponentRepository extends PagingAndSortingRepository<Qui
     @Query("select q from QuizComponent q where q.quiz.id = ?1")
     Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable);
     Iterable<QuizComponent> findByQuiz(Optional<Quiz> quiz);
-
     @Query("select q from QuizComponent q where q.quiz.id = ?1")
     Iterable<QuizComponent> getAllQuesByIdQuiz(Long id);
 

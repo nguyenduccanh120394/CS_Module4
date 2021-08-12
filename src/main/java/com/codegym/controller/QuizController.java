@@ -48,11 +48,6 @@ public class QuizController {
 
     @PutMapping
     public ResponseEntity<Quiz> edit(@RequestBody Quiz quiz){
-        if (quiz.getName()==null){
-            Optional<Quiz> quizCurrent=quizService.findById(quiz.getId());
-            quizService.save(quizCurrent.get());
-        }
-
         return new ResponseEntity<>(quizService.save(quiz),HttpStatus.ACCEPTED);
     }
 

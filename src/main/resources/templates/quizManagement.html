@@ -210,9 +210,10 @@
             for (let i = 0; i < data.length; i++) {
                 str+=`<div class="col-sm-6 col-lg-4">
                            <div class="feature-box-1">
+                                 <a><img src="https://img.icons8.com/ultraviolet/2x/xbox-x.png" style="float: right" width="20" height="20" onclick="deleteQuiz(${data[i].id})"></a>
                                  <span>
                                      <div class="icon" style="float: left">
-                                            <i class="fa fa-globe"></i>
+                                            <i class="fa fa-globe" onclick="getQuizComponent(${data[i].id})"></i>
                                      </div>
                                      <div class="feature-content" style="float: right">
                                             <h6>Quiz: ${data[i].id}</h6>
@@ -230,7 +231,7 @@
                 type: "GET",
                 url: "http://localhost:8080/api/quizComponents/quiz/"+id,
                 success:function (data){
-                    console.log(data)
+                    localStorage.setItem('name',data[0].quiz.name)
                     let str=`    <h4 style="text-align: center">Quiz ${id}</h4>
                                  <b style="margin-left: 15px;margin-bottom: 10px">Management :&emsp;&emsp;&emsp;&emsp;&emsp;
                                     <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 30px" onclick="showFomAddQuestion(${id})">Add Question</button>
@@ -238,11 +239,11 @@
                                     <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 30px" onclick="showFormEditQuiz(${id})"> Edit Title</button>
                                  </b>
                                  <b id="titleQuiz" style="margin-left: 15px">Title: ${data[0].quiz.name}</b><div id="titleQ"></div><b style="margin-left: 15px">List Question:</b></br>
-                                 <div class="row">`
+                                    <div class="row">`
                     for (let i = 0; i <data.length; i++) {
-                        str+=   `<div class="col-md-1">
-                                 <button type="submit" class="btn btn-outline-secondary" style="border-radius: 30px" onclick="getQuestion(${data[i].question.id},${i});onload(getAnswer(${data[i].question.id}))">${i+1}</button>
-                                 </div>`
+                        str+=   `    <div class="col-md-1">
+                                        <button type="submit" class="btn btn-outline-secondary" style="border-radius: 30px" onclick="getQuestion(${data[i].question.id},${i});onload(getAnswer(${data[i].question.id}))">${i+1}</button>
+                                    </div>`
                         document.getElementById('rightTop').innerHTML=str;
                     }
                 }
@@ -293,17 +294,18 @@
         }
         function showFormCreateQuiz(){
             let str=`<form class="form-control" style="background-color: white">
-                          <h2 style="text-align: center">Create new Quiz</h2>
-                          <h6 id="message" style="text-align: center"></h6>
+                            <h2 style="text-align: center">Create new Quiz</h2>
+                            <h6 id="message" style="text-align: center"></h6>
                           <div class="mb-3">
                             <b for="quizName" class="form-label">Quiz Name</b>
                             <input type="text" class="form-control" id="quizName" aria-describedby="emailHelp">
                           </div>
-                          <a class="btn btn-primary" onclick="createQuiz()">Create</a>
-                          <a class="btn btn-primary" onclick="loadData()">Back</a>
+                            <a class="btn btn-primary" onclick="createQuiz()">Create</a>
+                            <a class="btn btn-primary" onclick="loadData()">Back</a>
                     </form>`
                 document.getElementById('listQuiz').innerHTML=str;
         }
+
         function loadPage(){
             location.reload()
         }
@@ -327,6 +329,7 @@
                 }
             });
         }
+
         function showFomQuestion(){
             $.ajax({
                 type:"GET",
@@ -373,9 +376,6 @@
                 success:function (data){
                     let str=`<hr>
                              <h4>Add Question for Quiz ${id}</h4>
-                              <select class="form-select" aria-label="Default select example" id="category" style="width: 30%;margin-left: 12px"onchange="searchByIdCategory()">
-                                `+getCategoryQuestion()+
-                            `</select>
                              <hr>`
                     for (let i = 0; i <data.length; i++) {
                         str+=`  <div class="form-check form-switch" style="margin-left: 50px">
@@ -495,9 +495,10 @@
             }else {}
         }
         function showFormEditQuiz(id){
+            let name = localStorage.getItem('name')
             let str=`    <div class="mb-3" id="titleEdit">
                             <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" name="fname" id="title" required>
+                            <input type="text" class="form-control" id="title" value="`+`${name}`+`" >
                             <button type="submit" class="btn btn-outline-primary btn-sm" style="margin-top: 5px" onclick="editQuiz(${id})">Save</button>
                             <button type="submit" class="btn btn-outline-danger btn-sm" style="margin-top: 5px" onclick="loadPage()">Cancel</button>
                           </div>`
@@ -518,6 +519,7 @@
                     url:"http://localhost:8080/api/quizs?id="+id,
                     data:JSON.stringify(quiz),
                     success:function (data){
+                        localStorage.removeItem('name')
                         let mes=`Edit Successfully`+`<img src="https://img.icons8.com/color/2x/ok--v3.gif" width="25" height="25">`;
                         loadData()
                         $('#titleEdit').hide()
@@ -530,7 +532,7 @@
             let idCategory=document.getElementById('category').value;
             $.ajax({
                 type:"GET",
-                url:"http://localhost:8080/api/questions/"+idCategory,
+                url:"http://localhost:8080/api/questions"+idCategory,
                 success:function (data){
                     let str=`<hr>
                              <h4>Create Question for Quiz ${localStorage.getItem('idQuiz')}</h4>
@@ -607,7 +609,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </a><a href="#" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Home">
+                        </a><a href="home.html" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Home">
                         <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
                             <div class="card-body text-center">
                                 <div class="text-center">
