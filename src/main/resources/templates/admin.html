@@ -51,6 +51,94 @@
             display: flex;
             align-items: center;
         }
+
+        .masthead svg.wave {
+            position: absolute;
+            bottom: -1px;
+            left: 0
+        }
+
+        .masthead h1 {
+            color: #fff;
+            font-weight: 700;
+            font-size: 2rem;
+            line-height: 1.1;
+            z-index: 1
+        }
+
+        .masthead h2 {
+            color: rgba(255, 255, 255, .6);
+            font-weight: 600;
+            z-index: 1;
+            font-size: 1.2rem
+        }
+
+        .masthead a {
+            color: rgba(255, 255, 255, .8);
+            text-decoration: underline;
+            z-index: 1
+        }
+
+        .masthead a:hover {
+            color: #fff
+        }
+
+        .masthead a:active {
+            text-decoration: none
+        }
+
+        @media(min-width:992px) {
+            .masthead h1 {
+                font-size: 3rem
+            }
+            .masthead h2 {
+                font-size: 1.5rem
+            }
+        }
+
+
+        .masthead .masthead-cards .card {
+            opacity: 1;
+            font-size: .8rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: .05rem;
+            color: #212529;
+            transition: .15s all
+        }
+
+        .masthead .masthead-cards .card:hover {
+            margin-top: -.25rem;
+            margin-bottom: .25rem
+        }
+
+        .masthead .masthead-cards .card:active {
+            margin-top: inherit;
+            margin-bottom: inherit
+        }
+
+
+        .masthead .masthead-cards .card.border-bottom-green:hover {
+            color: #28a745
+        }
+
+        @media(min-width:992px) {
+            .masthead-page h1 {
+                font-size: 2.5rem
+            }
+        }
+
+
+        .border-bottom-green {
+            border-color: #28a745!important;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 2rem 1.5rem -1.5rem rgba(33,37,41,.15),0 0 1.5rem .5rem rgba(33,37,41,.05)!important;
+        }
+        .border-0 {
+            border: 0!important;
+        }
     </style>
     <script type="text/javascript">
         function error403(){
@@ -231,7 +319,7 @@
                 success:function (data){
                     total=`<h6><img src="https://image.flaticon.com/icons/png/128/1250/1250673.png" width="20" height="20">Có ` +data.length+ ` kết quả được tìm thấy</h6>`;
                     listUser(data)
-                    document.getElementById('resultSearch').innerHTML=total;
+                    document.getElementById('notification').innerHTML=total;
                 }
             })
         }
@@ -332,22 +420,62 @@
     </nav>
     <div class="container-fluid p-0">
         <div class="row">
-            <div class="col-xl-2">
+            <div class="col-xl-1">
                 <div class="card" style="height: 750px">
                     <div class="card-header pb-0">
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="key">
-                            <a class="btn btn-outline-success" type="submit" onclick="searchUser()">
-                                Search
-                            </a></br>
-                        </form>
+                        <h6><b>Shortcuts</b></h6>
+                        <hr>
                     </div>
-                    <div class="card-body">
-                        <div id="resultSearch"></div>
-                    </div>
+                        <div class="card-body">
+                            <a href="quizManagement.html" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Quiz Management">
+                                <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
+                                    <div class="card-body text-center">
+                                        <div class="text-center">
+                                            <img src="https://image.flaticon.com/icons/png/128/5276/5276967.png" width="42" height="42">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Score Management">
+                                <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
+                                    <div class="card-body text-center">
+                                        <div class="text-center">
+                                            <img src="https://image.flaticon.com/icons/png/128/3112/3112946.png" width="40" height="40">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Home">
+                                <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
+                                    <div class="card-body text-center">
+                                        <div class="text-center">
+                                            <img src="https://image.flaticon.com/icons/png/128/1946/1946433.png" width="40" height="40">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Question Category Management">
+                                <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
+                                    <div class="card-body text-center">
+                                        <div class="text-center">
+                                            <img src="https://image.flaticon.com/icons/png/128/1174/1174008.png" width="40" height="40">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="questionManagement.html" class="w-50 pl-3"  style="padding: 10px 10px 10px 10px" title="Shortcut Question Management">
+                                <div class="card border-0 border-bottom-green shadow-lg shadow-hover" style="border-radius: 50%">
+                                    <div class="card-body text-center">
+                                        <div class="text-center">
+                                            <img src="https://image.flaticon.com/icons/png/128/2538/2538036.png" width="40" height="40">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                 </div>
             </div>
-            <div class="col-xl-7">
+            <div class="col-xl-8">
 
                 <div class="card" style="height: 750px">
                     <div class="card-header pb-0">
@@ -355,7 +483,14 @@
                             <div class="col-md-6">
                                 <h5 class="card-title mb-0"><img src="https://img.icons8.com/ios/2x/double-tap-gesture.gif" height="30" width="30"> Click on the lines to see detailed information</h5>
                             </div>
-                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <form class="d-flex">
+                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="key">
+                                    <a class="btn btn-outline-success" type="submit" onclick="searchUser()">
+                                        Search
+                                    </a></br>
+                                </form>
+                            </div>
                             <div class="col-md-2">
                                 <div class="select-container">
                                     <select class="custom-select" style="border-radius: 5%;border: darkgrey " id="selectSort" onchange="changeSort()">
@@ -368,7 +503,7 @@
                         </div>
                     </div>
                     <div>
-                        <h6 id="notification" style="text-align: center"></h6>
+                        <h6 id="notification" style="padding-left: 20px"></h6>
                     </div>
                     <div class="card-body">
                         <table class="table table-hover" style="width:100%" id="listUser">

@@ -36,7 +36,6 @@ public class AdminController {
         Optional<User>user=userService.findById(id);
         return new ResponseEntity<>(user.get(),HttpStatus.OK);
     }
-    @CrossOrigin
     @PutMapping("/{id}")
     public ResponseEntity<User>edit(@PathVariable Long id,@RequestBody User user){
         Optional<User>userCurrent=userService.findById(id);

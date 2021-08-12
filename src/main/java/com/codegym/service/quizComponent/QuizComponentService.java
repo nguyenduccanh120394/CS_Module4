@@ -1,5 +1,6 @@
 package com.codegym.service.quizComponent;
 
+import com.codegym.model.Quiz;
 import com.codegym.model.QuizComponent;
 import com.codegym.repository.IQuizComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class QuizComponentService implements IQuizComponentService {
     @Override
     public void remove(Long id) {
         quizComponentRepository.deleteById(id);
+    }
+
+    @Override
+    public Iterable<QuizComponent> findByQuiz(Optional<Quiz> quiz) {
+        return quizComponentRepository.findByQuiz(quiz);
     }
 }
