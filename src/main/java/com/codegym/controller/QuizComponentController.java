@@ -28,6 +28,11 @@ public class QuizComponentController {
         return new ResponseEntity<>(quizComponentService.searchByIdQuiz(id, pageable),HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("getAllQuestion")
+    public ResponseEntity<Iterable<QuizComponent>> getAllQuestionById(@RequestParam Long id){
+        return new ResponseEntity<>(quizComponentService.getAllQuesById(id),HttpStatus.ACCEPTED);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<QuizComponent> create(@RequestBody QuizComponent quizComponent){
         return new ResponseEntity<>(quizComponentService.save(quizComponent),HttpStatus.ACCEPTED);

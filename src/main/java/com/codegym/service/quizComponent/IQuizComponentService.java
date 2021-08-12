@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface IQuizComponentService extends IGeneralService<QuizComponent> {
     Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable);
+
+    Iterable<QuizComponent> getAllQuesById(Long id);
 }

@@ -11,4 +11,9 @@ import org.springframework.stereotype.Repository;
 public interface IQuizComponentRepository extends PagingAndSortingRepository<QuizComponent,Long> {
     @Query("select q from QuizComponent q where q.quiz.id = ?1")
     Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable);
+
+    @Query("select q from QuizComponent q where q.quiz.id = ?1")
+    Iterable<QuizComponent> getAllQuesByIdQuiz(Long id);
+
+
 }

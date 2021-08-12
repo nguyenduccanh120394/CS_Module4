@@ -40,4 +40,9 @@ public class QuizComponentService implements IQuizComponentService {
     public Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable) {
         return quizComponentRepository.searchByIdQuiz(id, pageable);
     }
+
+    @Override
+    public Iterable<QuizComponent> getAllQuesById(Long id) {
+        return quizComponentRepository.getAllQuesByIdQuiz(id);
+    }
 }
