@@ -1,4 +1,5 @@
 package com.codegym.service.quizComponent;
+
 import com.codegym.model.Quiz;
 import com.codegym.model.QuizComponent;
 import com.codegym.repository.IQuizComponentRepository;
@@ -42,8 +43,13 @@ public class QuizComponentService implements IQuizComponentService {
 
     }
 
-        @Override
-        public Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable) {
+    @Override
+    public Page<QuizComponent> searchByIdQuiz(Long id, Pageable pageable) {
             return quizComponentRepository.searchByIdQuiz(id, pageable);
         }
+
+    @Override
+    public Iterable<QuizComponent> getAllQuesById(Long id) {
+        return quizComponentRepository.getAllQuesByIdQuiz(id);
+    }
 }

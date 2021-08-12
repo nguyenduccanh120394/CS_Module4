@@ -39,7 +39,7 @@ public class AnswerController {
         return new ResponseEntity<>(answerService.save(answer), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping()
     public ResponseEntity<Answer> remove(@RequestParam Long id){
         answerService.remove(id);
         return new ResponseEntity<>( HttpStatus.ACCEPTED);
