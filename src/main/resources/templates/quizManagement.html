@@ -194,7 +194,13 @@
         }
 
     </style>
+
     <script type="text/javascript">
+        function error403(){
+            if (localStorage.getItem('roles')=="ROLE_USER"||localStorage.getItem('roles')==null){
+                window.location.href="error403.html"
+            }
+        }
         function loadData(){
             $.ajax({
                 type:"GET",
@@ -263,7 +269,7 @@
                                           <a href="#"><img src="https://img.icons8.com/ios/2x/edit-column.png" height="23" width="25"></a>&nbsp;
                                           <a href="#"><img src="https://img.icons8.com/ios/2x/delete-forever.png" height="25" width="25"></a>
                                           <h5>${data.content}</h5>
-                                          <a type="submit" class="btn btn-link" onclick="getAnswer(${data.id})" style="text-decoration: none">View Answer...</a>
+                                          <a type="submit" class="btn btn-link" onclick="getAnswer(${data.id})" style="text-decoration: none">...</a>
                                       </ul>
                                     </div>
                                   </div>`
@@ -557,7 +563,7 @@
         }
     </script>
 </head>
-<body onload="loadData();infoAdmin()">
+<body onload="loadData();infoAdmin();error403()">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-radius: 5px">

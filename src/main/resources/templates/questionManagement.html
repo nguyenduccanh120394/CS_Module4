@@ -142,7 +142,7 @@
     </style>
     <script type="text/javascript">
         function error403(){
-            if (localStorage.getItem('token')==null){
+            if (localStorage.getItem('roles')!="ROLE_ADMIN"||localStorage.getItem('roles')!="ROLE_MANAGEMENT"){
                 window.location.href="error403.html"
             }
         }
@@ -302,7 +302,7 @@
                 </a>
             </div>
             <div id="admin">
-git             </div>
+            </div>
         </div>
     </nav>
     <div class="container-fluid p-0">

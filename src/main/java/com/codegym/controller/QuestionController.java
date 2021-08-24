@@ -26,7 +26,7 @@ public class QuestionController {
         return new ResponseEntity<>(questionService.findAll(), HttpStatus.ACCEPTED);
     }
     @GetMapping("/page")
-    public ResponseEntity<Page<Question>> findAll(@PageableDefault(size = 12, direction = Sort.Direction.ASC, sort = "id") Pageable pageable) {
+    public ResponseEntity<Page<Question>> findAll(@PageableDefault(size = 5, direction = Sort.Direction.ASC, sort = "id") Pageable pageable) {
         Page<Question> products = questionService.findAll(pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

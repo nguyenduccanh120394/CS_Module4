@@ -1,6 +1,7 @@
 package com.codegym.service.exam;
 
 import com.codegym.model.Exam;
+import com.codegym.model.Quiz;
 import com.codegym.repository.IExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,4 +37,5 @@ public class ExamService implements IExamService{
     public Iterable<Exam> findByIdUser(Long id) {
         return examRepository.findByIdUser(id);
     }
+
 }
